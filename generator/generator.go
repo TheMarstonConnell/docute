@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"docute/generator/config"
 	"fmt"
 	"golang.org/x/net/html"
 	"os"
@@ -128,7 +129,7 @@ func (g *Generator) Start() error {
 		return fmt.Errorf("failed to resolve output filepath")
 	}
 
-	os.RemoveAll(outPath)
+	_ = os.RemoveAll(outPath)
 
 	fmt.Println(p)
 
@@ -194,6 +195,12 @@ func (fn *FolderNode) walk(p string, node *html.Node) {
 
 func (g *Generator) Walk() {
 
+	cfg, err := config.ReadConfig(g.Target)
+	if err != nil {
+		fmt.Println("Could not open a config file, please run `docute init` before trying to build your new docs!")
+		return
+	}
+
 	g.Nav = createHTMLElement("ul", nil)
 	g.Tree.walk("", g.Nav)
 
@@ -201,7 +208,7 @@ func (g *Generator) Walk() {
 	body := createHTMLElement("body", nil)
 	title := createHTMLElement("h1", nil, &html.Node{
 		Type: html.TextNode,
-		Data: "Docute",
+		Data: cfg.ProjectName,
 	})
 
 	highlightcss := createHTMLElement("link", map[string]string{"rel": "stylesheet", "href": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"})
