@@ -39,14 +39,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Check if gh-pages branch exists
-          if start=$(git rev-parse refs/remotes/origin/gh-pages); then
-            extra="--track origin/gh-pages"
+          if git show-ref --quiet refs/heads/gh-pages; then
+            git checkout gh-pages
           else
-            start=HEAD
-            extra=
+            git checkout --orphan gh-pages
           fi
-          git checkout -b gh-pages ${start} $extra
           
           # Copy new content to the gh-pages branch
           cp -r out/* .
