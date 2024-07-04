@@ -44,27 +44,30 @@ func Gen(dir string, out string) error {
 		return err
 	}
 
-	_ = os.WriteFile(path.Join(out, "index.html"), index, os.ModePerm)
-	return nil
+	err = os.WriteFile(path.Join(out, "index.html"), index, os.ModePerm)
+	return err
 }
 
 func Walk(dir string, out string) error {
+	_ = os.MkdirAll(out, os.ModePerm)
+
 	contents, err := os.ReadDir(dir)
 	if err != nil {
 		return fmt.Errorf("cannot read %s | %w", dir, err)
 	}
-
 	for _, content := range contents {
 		p := path.Join(dir, content.Name())
 		o := path.Join(out, content.Name())
-
+		fmt.Println(p)
 		if content.IsDir() {
-			_ = os.MkdirAll(o, os.ModePerm)
+			err = os.MkdirAll(o, os.ModePerm)
+			if err != nil {
+				return err
+			}
 			err := Walk(p, o)
 			if err != nil {
 				return err
 			}
-
 			continue
 		}
 
@@ -82,7 +85,10 @@ func Walk(dir string, out string) error {
 		fileData := ReplaceMarkdownLinks(string(f))
 		htmlData := mdToHTML([]byte(fileData))
 
-		_ = os.WriteFile(newPath, htmlData, os.ModePerm)
+		err = os.WriteFile(newPath, htmlData, os.ModePerm)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
