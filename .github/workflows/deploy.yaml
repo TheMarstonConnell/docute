@@ -40,15 +40,13 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Check if gh-pages branch exists
-          if git ls-remote --exit-code --heads origin gh-pages; then
-            # Checkout gh-pages branch
-            git checkout gh-pages
-            # Remove all files in the branch
-            git rm -rf .
+          if start=$(git rev-parse refs/remotes/origin/gh-pages); then
+            extra="--track origin/gh-pages"
           else
-            # Create gh-pages branch if it doesn't exist
-            git checkout --orphan gh-pages
+            start=HEAD
+            extra=
           fi
+          git checkout -b gh-pages ${start} $extra
           
           # Copy new content to the gh-pages branch
           cp -r out/* .
