@@ -1,4 +1,4 @@
-package generator
+package gen
 
 import "bytes"
 import (
@@ -27,11 +27,11 @@ func createHTMLElement(tag string, attrs map[string]string, children ...*html.No
 }
 
 // renderHTML renders an HTML node to a string
-func renderHTML(node *html.Node) (string, error) {
+func renderHTML(node *html.Node) ([]byte, error) {
 	var buf bytes.Buffer
 	err := html.Render(&buf, node)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return buf.String(), nil
+	return buf.Bytes(), nil
 }
