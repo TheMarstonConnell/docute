@@ -25,7 +25,7 @@ jobs:
       - name: Run Go executable
         run: |
             cd docs
-            ../docute generate --base="/docs/"
+            ../docute generate --base="/docute/"
 
       - name: Setup Node.js (for Git commands)
         uses: actions/setup-node@v3
