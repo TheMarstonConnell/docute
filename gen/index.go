@@ -140,7 +140,7 @@ func CreateIndex(summaryData []byte, pageData []byte, marker string, base string
 
 	page := createHTMLElement("div", id("page"), bodyData)
 
-	title := createHTMLElement("img", add(id("logo"), "src", "/logo.png"))
+	title := createHTMLElement("img", add(id("logo"), "src", "logo.png"))
 
 	buttons := createHTMLElement("div", nil)
 	headerBar := createHTMLElement("div", id("header"), title, buttons)
