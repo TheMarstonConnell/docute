@@ -14,9 +14,7 @@ func GenerateCMD() *cobra.Command {
 		Long:  `Generate the custom documentation site from your configuration.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			target, _ := cmd.Flags().GetString("target")
-
-			gen.Gen(target, "out")
+			gen.Gen(".out")
 
 			return nil
 		},
@@ -31,7 +29,7 @@ func HostCMD() *cobra.Command {
 		Short: "host the static site.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			fs := http.FileServer(http.Dir("./out"))
+			fs := http.FileServer(http.Dir(".out"))
 
 			// Serve static files from the /static URL path
 			http.Handle("/", fs)
@@ -55,9 +53,8 @@ func WatchCMD() *cobra.Command {
 		Use:   "watch",
 		Short: "Watch for changes and host them as a static test site.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			target, _ := cmd.Flags().GetString("target")
 
-			gen.Gen(target, "out")
+			gen.Gen(".out")
 
 			fs := http.FileServer(http.Dir("./out"))
 

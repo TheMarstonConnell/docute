@@ -1,54 +1,91 @@
 package gen
 
 import (
+	"embed"
 	"fmt"
 	"os"
 	"path"
 	"regexp"
 )
 
+//go:embed fonts/*
+var fonts embed.FS
+
 func ReplaceMarkdownLinks(text string) string {
+	re := regexp.MustCompile(`(\[[^\]]+\]\()([^\)/][^\)]+)(\))`)
+
+	// Function to add leading slash
+	return re.ReplaceAllString(text, `$1/$2$3`)
+}
+
+func MakeAbsoluteLinks(text string) string {
 	re := regexp.MustCompile(`\(([^()]+)\.md\)`)
 
 	return re.ReplaceAllString(text, "($1.html)")
 }
 
-func ListFiles(dir string, out string) error {
-	p := path.Join(dir, "SUMMARY.md")
-	data, err := os.ReadFile(p)
+func Gen(out string) error {
+
+	_ = os.RemoveAll(out)
+
+	dir, err := os.Getwd()
+
+	d, err := os.ReadFile("SUMMARY.md")
 	if err != nil {
-		return fmt.Errorf("cannot read %s | %w", p, err)
+		fmt.Println(err)
+		return err
+	}
+	dd := MakeAbsoluteLinks(string(d))
+	fileData := ReplaceMarkdownLinks(string(dd))
+	htmlData := mdToHTML([]byte(fileData))
+	err = Walk(dir, out, htmlData)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	readme, err := os.ReadFile(path.Join(out, "README.html"))
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	err = os.WriteFile(path.Join(out, "index.html"), readme, os.ModePerm)
+	if err != nil {
+		fmt.Println(err)
+		return err
 	}
 
-	fmt.Println(ReplaceMarkdownLinks(string(data)))
+	fontEntries, err := fonts.ReadDir("fonts")
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	for _, entry := range fontEntries {
+		fmt.Println(entry.Name())
+		fontData, err := fonts.ReadFile(path.Join("fonts", entry.Name()))
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+		err = os.WriteFile(path.Join(out, entry.Name()), fontData, os.ModePerm)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+	}
+
+	logo, err := os.ReadFile("logo.png")
+	if err == nil {
+		err = os.WriteFile(path.Join(out, "logo.png"), logo, os.ModePerm)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+	}
 
 	return nil
 }
 
-func Gen(dir string, out string) error {
-
-	_ = os.RemoveAll(out)
-
-	err := Walk(dir, out)
-	if err != nil {
-		return err
-	}
-
-	d, err := os.ReadFile(path.Join(out, "SUMMARY.html"))
-	if err != nil {
-		return err
-	}
-
-	index, err := CreateIndex(d)
-	if err != nil {
-		return err
-	}
-
-	err = os.WriteFile(path.Join(out, "index.html"), index, os.ModePerm)
-	return err
-}
-
-func Walk(dir string, out string) error {
+func Walk(dir string, out string, summary []byte) error {
 	_ = os.MkdirAll(out, os.ModePerm)
 
 	contents, err := os.ReadDir(dir)
@@ -59,13 +96,19 @@ func Walk(dir string, out string) error {
 		p := path.Join(dir, content.Name())
 		o := path.Join(out, content.Name())
 		fmt.Println(p)
+		if content.Name()[0:1] == "." {
+			continue
+		}
+
 		if content.IsDir() {
 			err = os.MkdirAll(o, os.ModePerm)
 			if err != nil {
+				fmt.Println(err)
 				return err
 			}
-			err := Walk(p, o)
+			err := Walk(p, o, summary)
 			if err != nil {
+				fmt.Println(err)
 				return err
 			}
 			continue
@@ -79,14 +122,22 @@ func Walk(dir string, out string) error {
 		newPath := o[:len(o)-2] + "html"
 		f, err := os.ReadFile(p)
 		if err != nil {
+			fmt.Println(err)
 			return err
 		}
 
 		fileData := ReplaceMarkdownLinks(string(f))
 		htmlData := mdToHTML([]byte(fileData))
 
-		err = os.WriteFile(newPath, htmlData, os.ModePerm)
+		newData, err := CreateIndex(summary, htmlData, newPath[4:])
 		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+
+		err = os.WriteFile(newPath, newData, os.ModePerm)
+		if err != nil {
+			fmt.Println(err)
 			return err
 		}
 	}

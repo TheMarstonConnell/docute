@@ -1,3 +1,6 @@
 # Docute
 
-[Introduction](README.md)
+[Introduction](/README.md)
+
+## Syntax
+[Syntax](/syntax/syntax.md)

@@ -1,0 +1,166 @@
+:root {
+    --primary: #E9F451;
+    --text: #1B1C16;
+    --background: #DDDCCE;
+    --secondary: #C6C5AD;
+}
+
+@font-face {
+    font-family: "teka";
+    src: url("/teka-reg.woff") format('woff');
+}
+
+@font-face {
+    font-family: "teka";
+    src: url("/teka-bold.woff") format('woff');
+    font-weight: bold;
+}
+html, body {
+    color: var(--text);
+    background-color: var(--background);
+    font-family: teka;
+}
+
+#header {
+    background-color: var(--text);
+    color: var(--background);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+#header > * {
+    margin: 0px;
+}
+
+#logo {
+    height: 48px;
+    padding-bottom: 6px;
+}
+
+#main {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+#navbar {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 1rem;
+
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+
+    background-color: var(--secondary);
+}
+
+#navbar > h1:first-child {
+    display: none;
+}
+
+
+
+#navbar > * {
+    margin: 0px;
+}
+
+#navbar > ul > li {
+    padding: 0rem 0rem 0rem 0.875rem;
+    margin: 0px;
+}
+
+#navbar > ul > li > a {
+    padding: 0.375rem 0.375rem 0.375rem 0.375rem;
+    margin: 0px;
+}
+
+#navbar > ul {
+    padding: 0rem 0.375rem 0rem 0rem;
+    margin: 0px;
+}
+
+#navbar > h2 {
+    padding: 1.5rem 0.375rem 0.375rem 1.25rem;
+    text-transform: uppercase;
+}
+
+#page {
+    padding-left: 20px;
+    padding-right: 80px;
+    overflow-y: scroll;
+    padding-bottom: 64px;
+}
+
+#navbar > li, ul {
+    user-select: none;
+}
+
+li {
+    margin-top: 6px;
+}
+
+#nv {
+    overflow: scroll;
+}
+
+ul {
+    list-style: none;
+    font-style: normal;
+}
+
+#page > ul {
+    list-style: disc;
+}
+
+a.active {
+    font-weight: bold;
+    /*color: var(--primary);*/
+    background-color: var(--primary);
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.dropdown {
+    cursor: pointer;
+}
+
+li.dropdown > ul {
+    display: none;
+}
+
+li.dropdown.open > ul {
+    display: block;
+}
+
+.dropdown.open {
+    font-style: italic;
+}
+
+#navbar > ul > li:hover > a {
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#navbar > ul > li > a {
+    width: 100%;
+    display: inline-block;
+}
+
+
+#navbar > h2 {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.hljs {
+    background-color: var(--secondary) !important;
+}

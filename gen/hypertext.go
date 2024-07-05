@@ -1,6 +1,10 @@
 package gen
 
-import "bytes"
+import (
+	"bytes"
+	"regexp"
+	"strings"
+)
 import (
 	"golang.org/x/net/html"
 )
@@ -26,6 +30,19 @@ func createHTMLElement(tag string, attrs map[string]string, children ...*html.No
 	return elem
 }
 
+func processHintTags(content string) string {
+	re := regexp.MustCompile(`{% hint style="(\w+)" %}(.*?){% endhint %}`)
+	return re.ReplaceAllStringFunc(content, func(s string) string {
+		matches := re.FindStringSubmatch(s)
+		if len(matches) != 3 {
+			return s
+		}
+		style, hintContent := matches[1], matches[2]
+		hintContent = strings.TrimSpace(hintContent)
+		return `<div class="hint ` + style + `">` + hintContent + `</div>`
+	})
+}
+
 // renderHTML renders an HTML node to a string
 func renderHTML(node *html.Node) ([]byte, error) {
 	var buf bytes.Buffer
@@ -33,5 +50,5 @@ func renderHTML(node *html.Node) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return buf.Bytes(), nil
+	return []byte(processHintTags(buf.String())), nil
 }
