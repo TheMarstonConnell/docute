@@ -5,6 +5,7 @@ import (
 	"embed"
 	"fmt"
 	"path"
+	"regexp"
 
 	"golang.org/x/net/html"
 )
@@ -155,5 +156,26 @@ func CreateIndex(summaryData []byte, pageData []byte, marker string, base string
 	body.AppendChild(highlightInit)
 
 	root := createHTMLElement("html", nil, CreateHead(base), body)
-	return renderHTML(root)
+
+	r, err := renderHTML(root)
+	if err != nil {
+		return nil, err
+	}
+
+	return []byte(replaceHintTags(string(r))), nil
+}
+
+func replaceHintTags(content string) string {
+	// Define the regex pattern to match the hint tags
+	re := regexp.MustCompile(`(?s){% hint style=[“"](\w+)[”"] %}(.*?){% endhint %}`)
+
+	// Replace the hint tags with the appropriate div
+	return re.ReplaceAllStringFunc(content, func(s string) string {
+		matches := re.FindStringSubmatch(s)
+		if len(matches) != 3 {
+			return s
+		}
+		style, hintContent := matches[1], matches[2]
+		return fmt.Sprintf(`<div class="hint %s">%s</div>`, style, hintContent)
+	})
 }

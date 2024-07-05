@@ -164,3 +164,13 @@ li.dropdown.open > ul {
 .hljs {
     background-color: var(--secondary) !important;
 }
+
+.hint {
+    background-color: var(--primary);
+    padding: 1rem;
+    text-align: center;
+
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
