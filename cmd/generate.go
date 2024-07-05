@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"docute/gen"
+	"github.com/TheMarstonConnell/docute/gen"
 	"github.com/spf13/cobra"
 )
 

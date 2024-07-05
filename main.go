@@ -1,6 +1,6 @@
 package main
 
-import "docute/cmd"
+import "github.com/TheMarstonConnell/docute/cmd"
 
 func main() {
 	root := cmd.RootCMD()
