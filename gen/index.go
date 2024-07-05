@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"embed"
 	"fmt"
-	"golang.org/x/net/html"
 	"path"
+
+	"golang.org/x/net/html"
 )
 import _ "embed"
 
@@ -67,16 +68,20 @@ func addClassToNode(node *html.Node, classToAdd string) {
 	node.Attr = append(node.Attr, html.Attribute{Key: "class", Val: classToAdd})
 }
 
-func CreateHead() *html.Node {
+func CreateHead(base string) *html.Node {
 	head := createHTMLElement("head", nil)
 
 	highlightcss := createHTMLElement("link", map[string]string{"rel": "stylesheet", "href": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"})
 	highlightjs := createHTMLElement("script", map[string]string{"src": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"})
 	highlightjsGo := createHTMLElement("script", map[string]string{"src": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"})
 
+	b := createHTMLElement("base", map[string]string{"href": base})
+
 	head.AppendChild(highlightcss)
 	head.AppendChild(highlightjs)
 	head.AppendChild(highlightjsGo)
+
+	head.AppendChild(b)
 
 	normalizecss := createHTMLElement("style", nil, &html.Node{
 		Type: html.TextNode,
@@ -114,7 +119,7 @@ func CreateNav(summary *html.Node) *html.Node {
 	return nav
 }
 
-func CreateIndex(summaryData []byte, pageData []byte, marker string) ([]byte, error) {
+func CreateIndex(summaryData []byte, pageData []byte, marker string, base string) ([]byte, error) {
 	body := createHTMLElement("body", nil)
 
 	n, err := html.Parse(bytes.NewReader(summaryData))
@@ -149,7 +154,6 @@ func CreateIndex(summaryData []byte, pageData []byte, marker string) ([]byte, er
 	})
 	body.AppendChild(highlightInit)
 
-	root := createHTMLElement("html", nil, CreateHead(), body)
+	root := createHTMLElement("html", nil, CreateHead(base), body)
 	return renderHTML(root)
-
 }

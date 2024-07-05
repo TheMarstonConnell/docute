@@ -7,12 +7,12 @@
 
 @font-face {
     font-family: "teka";
-    src: url("/teka-reg.woff") format('woff');
+    src: url("teka-reg.woff") format('woff');
 }
 
 @font-face {
     font-family: "teka";
-    src: url("/teka-bold.woff") format('woff');
+    src: url("teka-bold.woff") format('woff');
     font-weight: bold;
 }
 html, body {

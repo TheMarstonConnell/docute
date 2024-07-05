@@ -8,4 +8,12 @@ host: install generate
 	cd docs && docute host
 
 
-.PHONY: host install generate
+
+format-tools:
+	go install mvdan.cc/gofumpt@v0.6.0
+	gofumpt -l -w .
+
+lint: format-tools
+	golangci-lint run
+
+.PHONY: host install generate format-tools lint

@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"docute/gen"
-	"github.com/spf13/cobra"
 	"log"
 	"net/http"
+
+	"docute/gen"
+	"github.com/spf13/cobra"
 )
 
 func GenerateCMD() *cobra.Command {
@@ -13,8 +14,14 @@ func GenerateCMD() *cobra.Command {
 		Short: "Generate a fully static site",
 		Long:  `Generate the custom documentation site from your configuration.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-
-			gen.Gen(".out")
+			base, err := cmd.Flags().GetString("base")
+			if err != nil {
+				return err
+			}
+			err = gen.Gen(".out", base)
+			if err != nil {
+				return err
+			}
 
 			return nil
 		},
@@ -28,7 +35,6 @@ func HostCMD() *cobra.Command {
 		Use:   "host",
 		Short: "host the static site.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-
 			fs := http.FileServer(http.Dir(".out"))
 
 			// Serve static files from the /static URL path
@@ -53,8 +59,15 @@ func WatchCMD() *cobra.Command {
 		Use:   "watch",
 		Short: "Watch for changes and host them as a static test site.",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			base, err := cmd.Flags().GetString("base")
+			if err != nil {
+				return err
+			}
 
-			gen.Gen(".out")
+			err = gen.Gen(".out", base)
+			if err != nil {
+				return err
+			}
 
 			fs := http.FileServer(http.Dir("./out"))
 
@@ -63,7 +76,7 @@ func WatchCMD() *cobra.Command {
 
 			// Start the server on port 9797
 			log.Println("Listening on :9797...")
-			err := http.ListenAndServe(":9797", nil)
+			err = http.ListenAndServe(":9797", nil)
 			if err != nil {
 				log.Fatal(err)
 			}

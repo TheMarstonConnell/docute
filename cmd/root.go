@@ -13,6 +13,7 @@ func RootCMD() *cobra.Command {
 		Short: "Docute is an insanely fast static documentation site generator.",
 		Long:  `Docute is an insanely fast static documentation site generator.`,
 	}
+	c.PersistentFlags().StringP("base", "b", "/", "choose which base to use for all links")
 
 	return &c
 }
