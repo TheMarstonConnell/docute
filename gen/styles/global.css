@@ -93,9 +93,12 @@ html, body {
     padding-bottom: 64px;
 }
 
-#navbar > li, ul {
+
+
+#navbar > li, #navbar > ul {
     user-select: none;
 }
+
 
 li {
     margin-top: 6px;
