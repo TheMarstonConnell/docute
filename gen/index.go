@@ -43,19 +43,28 @@ func hasMatchingHref(node *html.Node, href string) bool {
 	return false
 }
 
-func visit(node *html.Node, marker string, class string) {
+func visit(node *html.Node, marker string, class string) string {
 	if node == nil {
-		return
+		return ""
 	}
 
 	if hasMatchingHref(node, marker) {
 		addClassToNode(node, class)
+		d := node.FirstChild.Data
+		fmt.Printf("data: %s\n", d)
+		return d
 	}
 
 	// Recursively visit child nodes
 	for c := node.FirstChild; c != nil; c = c.NextSibling {
-		visit(c, marker, class)
+		s := visit(c, marker, class)
+		if len(s) > 1 {
+			fmt.Printf("Recursive Data: %s\n", s)
+			return s
+		}
 	}
+
+	return ""
 }
 
 // Function to add a class to an HTML node
@@ -69,10 +78,14 @@ func addClassToNode(node *html.Node, classToAdd string) {
 	node.Attr = append(node.Attr, html.Attribute{Key: "class", Val: classToAdd})
 }
 
-func CreateHead(base string) *html.Node {
+func CreateHead(base string, titleText string) *html.Node {
 	head := createHTMLElement("head", nil)
 
 	meta := createHTMLElement("meta", map[string]string{"name": "viewport", "content": "width=device-width, initial-scale=1"})
+	title := createHTMLElement("title", nil, &html.Node{
+		Type: html.TextNode,
+		Data: titleText,
+	})
 
 	icons := createHTMLElement("link", map[string]string{"rel": "stylesheet", "href": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"})
 	highlightcss := createHTMLElement("link", map[string]string{"rel": "stylesheet", "href": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"})
@@ -82,6 +95,7 @@ func CreateHead(base string) *html.Node {
 	b := createHTMLElement("base", map[string]string{"href": base})
 
 	head.AppendChild(meta)
+	head.AppendChild(title)
 
 	head.AppendChild(highlightcss)
 	head.AppendChild(highlightjs)
@@ -126,7 +140,7 @@ func CreateNav(summary *html.Node) *html.Node {
 	return nav
 }
 
-func CreateIndex(summaryData []byte, pageData []byte, marker string, base string) ([]byte, error) {
+func CreateIndex(summaryData []byte, pageData []byte, marker string, base string, titleText string) ([]byte, error) {
 	body := createHTMLElement("body", nil)
 
 	n, err := html.Parse(bytes.NewReader(summaryData))
@@ -135,7 +149,7 @@ func CreateIndex(summaryData []byte, pageData []byte, marker string, base string
 		return nil, err
 	}
 
-	visit(n, marker, "active")
+	s := visit(n, marker, "active")
 
 	bodyData, err := html.Parse(bytes.NewReader(pageData))
 	if err != nil {
@@ -172,7 +186,7 @@ func CreateIndex(summaryData []byte, pageData []byte, marker string, base string
 	})
 	body.AppendChild(docsJs)
 
-	root := createHTMLElement("html", nil, CreateHead(base), body)
+	root := createHTMLElement("html", nil, CreateHead(base, fmt.Sprintf("%s - %s", s, titleText)), body)
 
 	r, err := renderHTML(root)
 	if err != nil {

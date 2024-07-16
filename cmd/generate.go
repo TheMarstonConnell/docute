@@ -18,7 +18,12 @@ func GenerateCMD() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			err = gen.Gen(".out", base)
+
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				return err
+			}
+			err = gen.Gen(".out", base, title)
 			if err != nil {
 				return err
 			}
@@ -64,7 +69,12 @@ func WatchCMD() *cobra.Command {
 				return err
 			}
 
-			err = gen.Gen(".out", base)
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				return err
+			}
+
+			err = gen.Gen(".out", base, title)
 			if err != nil {
 				return err
 			}

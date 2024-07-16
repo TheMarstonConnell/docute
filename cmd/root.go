@@ -14,6 +14,7 @@ func RootCMD() *cobra.Command {
 		Long:  `Docute is an insanely fast static documentation site generator.`,
 	}
 	c.PersistentFlags().StringP("base", "b", "/", "choose which base to use for all links")
+	c.PersistentFlags().StringP("title", "t", "Docute Docs", "Set the title of your page")
 
 	return &c
 }
