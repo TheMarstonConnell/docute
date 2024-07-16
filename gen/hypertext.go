@@ -47,6 +47,8 @@ func processHintTags(content string) string {
 // renderHTML renders an HTML node to a string
 func renderHTML(node *html.Node) ([]byte, error) {
 	var buf bytes.Buffer
+	buf.WriteString("<!DOCTYPE html>\n") // Prepend the DOCTYPE declaration
+
 	err := html.Render(&buf, node)
 	if err != nil {
 		return nil, err
