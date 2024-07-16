@@ -34,7 +34,7 @@
         /*    "page page ";*/
 
         overflow-y: scroll;
-        max-height: 100vh;
+        max-height: 100dvh;
     }
 
     #navbar {
