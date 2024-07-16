@@ -81,7 +81,7 @@ func addClassToNode(node *html.Node, classToAdd string) {
 func CreateHead(base string, titleText string) *html.Node {
 	head := createHTMLElement("head", nil)
 
-	meta := createHTMLElement("meta", map[string]string{"name": "viewport", "content": "width=device-width, initial-scale=1"})
+	meta := createHTMLElement("meta", map[string]string{"name": "viewport", "content": "width=device-width, initial-scale=1, viewport-fit=cover"})
 	title := createHTMLElement("title", nil, &html.Node{
 		Type: html.TextNode,
 		Data: titleText,
