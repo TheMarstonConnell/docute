@@ -26,12 +26,15 @@
     }
 
     #main {
-        display: grid;
-        grid-template-columns: 1fr 3fr;
-        grid-template-rows: 80px 1fr ;
-        grid-template-areas:
-            "header header"
-            "page page ";
+        display: block;
+        /*grid-template-columns: 1fr 3fr;*/
+        /*grid-template-rows: 80px 1fr ;*/
+        /*grid-template-areas:*/
+        /*    "header header"*/
+        /*    "page page ";*/
+
+        overflow-y: scroll;
+        max-height: 100vh;
     }
 
     #navbar {
@@ -57,19 +60,25 @@
     }
 
     #page {
-        grid-area: page;
 
         padding-left: 0px;
         padding-right: 0px;
+
+        padding-top: 96px;
 
         margin-left: auto;
         margin-right: auto;
 
         width: calc(100% - (24px + 1rem) * 2);
+
     }
 
     #header {
-        grid-area: header;
+       position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 80px;
     }
 
 }
