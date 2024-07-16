@@ -10,6 +10,8 @@
     padding-top: 4px;
     padding-bottom: 4px;
     font-size: 32px;
+    color: var(--text);
+    width: min-content;
 }
 
 
@@ -48,6 +50,7 @@
     #navbar.open {
         height: calc(100vh - 8rem);
         overflow-y: scroll;
+        padding-bottom: 160px;
     }
     #navbar.open > ul:nth-child(2) {
         margin-top: 40px;
