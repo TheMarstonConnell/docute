@@ -11,8 +11,8 @@ import (
 )
 import _ "embed"
 
-////go:embed docs.js
-//var docScript string
+//go:embed script.js
+var docScript string
 
 //go:embed normalize.css
 var normalize string
@@ -72,15 +72,21 @@ func addClassToNode(node *html.Node, classToAdd string) {
 func CreateHead(base string) *html.Node {
 	head := createHTMLElement("head", nil)
 
+	meta := createHTMLElement("meta", map[string]string{"name": "viewport", "content": "width=device-width, initial-scale=1"})
+
+	icons := createHTMLElement("link", map[string]string{"rel": "stylesheet", "href": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"})
 	highlightcss := createHTMLElement("link", map[string]string{"rel": "stylesheet", "href": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"})
 	highlightjs := createHTMLElement("script", map[string]string{"src": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"})
 	highlightjsGo := createHTMLElement("script", map[string]string{"src": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"})
 
 	b := createHTMLElement("base", map[string]string{"href": base})
 
+	head.AppendChild(meta)
+
 	head.AppendChild(highlightcss)
 	head.AppendChild(highlightjs)
 	head.AppendChild(highlightjsGo)
+	head.AppendChild(icons)
 
 	head.AppendChild(b)
 
@@ -144,7 +150,12 @@ func CreateIndex(summaryData []byte, pageData []byte, marker string, base string
 	title := createHTMLElement("img", add(id("logo"), "src", "logo.png"))
 
 	buttons := createHTMLElement("div", nil)
-	headerBar := createHTMLElement("div", id("header"), title, buttons)
+
+	burgerIcon := createHTMLElement("i", add(id("bars"), "class", "fa fa-bars"))
+
+	hamburgerButton := createHTMLElement("button", id("menu"), burgerIcon)
+
+	headerBar := createHTMLElement("div", id("header"), title, buttons, hamburgerButton)
 
 	main := createHTMLElement("div", id("main"), headerBar, nav, page)
 
@@ -154,6 +165,12 @@ func CreateIndex(summaryData []byte, pageData []byte, marker string, base string
 		Data: "hljs.highlightAll();",
 	})
 	body.AppendChild(highlightInit)
+
+	docsJs := createHTMLElement("script", nil, &html.Node{
+		Type: html.TextNode,
+		Data: docScript,
+	})
+	body.AppendChild(docsJs)
 
 	root := createHTMLElement("html", nil, CreateHead(base), body)
 
