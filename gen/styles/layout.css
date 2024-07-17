@@ -2,15 +2,15 @@
 #menu {
     display: none;
     position: absolute;
-    right: 1rem;
-    top: 1rem;
+    right: calc(24px + 1rem);
+    top: 1.75rem;
 
-    background-color: var(--background);
+    background-color: #00000000;
     border: none;
     padding-top: 4px;
     padding-bottom: 4px;
     font-size: 32px;
-    color: var(--text);
+    color: var(--background);
     width: min-content;
 }
 
@@ -38,22 +38,34 @@
     }
 
     #navbar {
+        box-sizing: border-box;
         position: absolute;
         top: 5rem;
         left: 0;
         width: 100vw;
         height: 0vh;
         grid-area: nav;
-        transition: height 1s;
-
+        transition: height 0.4s;
         padding-top: 0px;
+        padding-bottom: 0px;
 
         overflow-y: hidden;
+
+        background-color: var(--text);
+        color: var(--background);
+    }
+    #navbar >ul>li > a {
+        color: var(--background);
+    }
+    #navbar >ul>li > a.active {
+        color: var(--text);
     }
     #navbar.open {
-        height: calc(100vh - 8rem);
+        height: calc(100vh - 5rem);
         overflow-y: scroll;
-        padding-bottom: 160px;
+    }
+    #navbar.open > *:last-child {
+        margin-bottom: 160px;
     }
     #navbar.open > ul:nth-child(2) {
         margin-top: 40px;
