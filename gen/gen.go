@@ -11,6 +11,21 @@ import (
 //go:embed fonts/*
 var fonts embed.FS
 
+//go:embed thirdparty/default.min.css
+var defaultcss []byte
+
+//go:embed thirdparty/font-awesome.min.css
+var fontawesome []byte
+
+//go:embed thirdparty/go.min.js
+var gomin []byte
+
+//go:embed thirdparty/highlight.min.js
+var highlight []byte
+
+//go:embed empty.png
+var empty []byte
+
 func ReplaceMarkdownLinks(text string) string {
 	re := regexp.MustCompile(`(\[[^\]]+\]\()([^\)/][^\)]+)(\))`)
 
@@ -77,12 +92,46 @@ func Gen(out string, base string, titleText string) error {
 	}
 
 	logo, err := os.ReadFile("logo.png")
+	if err != nil {
+		logo = empty
+	}
+	err = os.WriteFile(path.Join(out, "logo.png"), logo, os.ModePerm)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	favi, err := os.ReadFile("icon.png")
 	if err == nil {
-		err = os.WriteFile(path.Join(out, "logo.png"), logo, os.ModePerm)
+		err = os.WriteFile(path.Join(out, "icon.png"), favi, os.ModePerm)
 		if err != nil {
 			fmt.Println(err)
 			return err
 		}
+	}
+
+	err = os.WriteFile(path.Join(out, "default.min.css"), defaultcss, os.ModePerm)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	err = os.WriteFile(path.Join(out, "font-awesome.min.css"), fontawesome, os.ModePerm)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	err = os.WriteFile(path.Join(out, "go.min.js"), gomin, os.ModePerm)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	err = os.WriteFile(path.Join(out, "highlight.min.js"), highlight, os.ModePerm)
+	if err != nil {
+		fmt.Println(err)
+		return err
 	}
 
 	return nil
