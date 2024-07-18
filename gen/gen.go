@@ -3,6 +3,7 @@ package gen
 import (
 	"embed"
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"os"
 	"path"
 	"regexp"
@@ -54,9 +55,22 @@ func Gen(out string, base string, titleText string) error {
 		return err
 	}
 	dd := MakeAbsoluteLinks(string(d))
+
+	color := DefaultColors()
+	colorFile, err := os.ReadFile("colors.yaml")
+	if err == nil {
+		err = yaml.Unmarshal(colorFile, &color)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+	} else {
+		fmt.Println(err)
+	}
+
 	// fileData := ReplaceMarkdownLinks(string(d))
 	htmlData := mdToHTML([]byte(dd))
-	err = Walk(dir, out, htmlData, base, titleText)
+	err = Walk(dir, out, htmlData, base, titleText, color)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -78,7 +92,6 @@ func Gen(out string, base string, titleText string) error {
 		return nil
 	}
 	for _, entry := range fontEntries {
-		fmt.Println(entry.Name())
 		fontData, err := fonts.ReadFile(path.Join("fonts", entry.Name()))
 		if err != nil {
 			fmt.Println(err)
@@ -95,6 +108,7 @@ func Gen(out string, base string, titleText string) error {
 	if err != nil {
 		logo = empty
 	}
+
 	err = os.WriteFile(path.Join(out, "logo.png"), logo, os.ModePerm)
 	if err != nil {
 		fmt.Println(err)
@@ -137,7 +151,7 @@ func Gen(out string, base string, titleText string) error {
 	return nil
 }
 
-func Walk(dir string, out string, summary []byte, base string, titleText string) error {
+func Walk(dir string, out string, summary []byte, base string, titleText string, color Colors) error {
 	_ = os.MkdirAll(out, os.ModePerm)
 
 	contents, err := os.ReadDir(dir)
@@ -147,7 +161,6 @@ func Walk(dir string, out string, summary []byte, base string, titleText string)
 	for _, content := range contents {
 		p := path.Join(dir, content.Name())
 		o := path.Join(out, content.Name())
-		fmt.Println(p)
 		if content.Name()[0:1] == "." {
 			continue
 		}
@@ -158,7 +171,7 @@ func Walk(dir string, out string, summary []byte, base string, titleText string)
 				fmt.Println(err)
 				return err
 			}
-			err := Walk(p, o, summary, base, titleText)
+			err := Walk(p, o, summary, base, titleText, color)
 			if err != nil {
 				fmt.Println(err)
 				return err
@@ -181,7 +194,7 @@ func Walk(dir string, out string, summary []byte, base string, titleText string)
 		fileData := ReplaceMarkdownLinks(string(f))
 		htmlData := mdToHTML([]byte(fileData))
 
-		newData, err := CreateIndex(summary, htmlData, newPath[5:], base, titleText)
+		newData, err := CreateIndex(summary, htmlData, newPath[5:], base, titleText, color)
 		if err != nil {
 			fmt.Println(err)
 			return err

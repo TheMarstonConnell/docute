@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"gopkg.in/yaml.v3"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/TheMarstonConnell/docute/gen"
 	"github.com/spf13/cobra"
@@ -28,6 +30,29 @@ func GenerateCMD() *cobra.Command {
 				return err
 			}
 
+			return nil
+		},
+	}
+
+	return &c
+}
+
+func GenColorFile() *cobra.Command {
+	c := cobra.Command{
+		Use:   "colors",
+		Short: "Generate a color file",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			col := gen.DefaultColors()
+
+			data, err := yaml.Marshal(col)
+			if err != nil {
+				return err
+			}
+
+			err = os.WriteFile("colors.yaml", data, os.ModePerm)
+			if err != nil {
+				return err
+			}
 			return nil
 		},
 	}

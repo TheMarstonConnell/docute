@@ -34,7 +34,6 @@ func hasMatchingHref(node *html.Node, href string) bool {
 	if node.Type == html.ElementNode && node.Data == "a" {
 		for _, attr := range node.Attr {
 			v := attr.Val
-			fmt.Printf("%s = %s ? \n", href, v)
 			if attr.Key == "href" && v == href {
 				return true
 			}
@@ -51,7 +50,6 @@ func visit(node *html.Node, marker string, class string) string {
 	if hasMatchingHref(node, marker) {
 		addClassToNode(node, class)
 		d := node.FirstChild.Data
-		fmt.Printf("data: %s\n", d)
 		return d
 	}
 
@@ -59,7 +57,6 @@ func visit(node *html.Node, marker string, class string) string {
 	for c := node.FirstChild; c != nil; c = c.NextSibling {
 		s := visit(c, marker, class)
 		if len(s) > 1 {
-			fmt.Printf("Recursive Data: %s\n", s)
 			return s
 		}
 	}
@@ -78,7 +75,7 @@ func addClassToNode(node *html.Node, classToAdd string) {
 	node.Attr = append(node.Attr, html.Attribute{Key: "class", Val: classToAdd})
 }
 
-func CreateHead(base string, titleText string) *html.Node {
+func CreateHead(base string, titleText string, color Colors) *html.Node {
 	head := createHTMLElement("head", nil)
 
 	meta := createHTMLElement("meta", map[string]string{"name": "viewport", "content": "width=device-width, initial-scale=1, viewport-fit=cover"})
@@ -120,8 +117,21 @@ func CreateHead(base string, titleText string) *html.Node {
 		fmt.Println(err)
 		return nil
 	}
+
+	colorData := fmt.Sprintf(`:root {
+	--primary: %s;
+	--text: %s;
+	--background: %s;
+	--secondary: %s;
+	--title: %s;
+}`, color.Primary, color.Text, color.Background, color.Secondary, color.TitleBar)
+
+	head.AppendChild(createHTMLElement("style", nil, &html.Node{
+		Type: html.TextNode,
+		Data: colorData,
+	}))
+
 	for _, entry := range styleEntries {
-		fmt.Println(entry.Name())
 
 		cssData, err := styles.ReadFile(path.Join("styles", entry.Name()))
 		if err != nil {
@@ -145,7 +155,7 @@ func CreateNav(summary *html.Node) *html.Node {
 	return nav
 }
 
-func CreateIndex(summaryData []byte, pageData []byte, marker string, base string, titleText string) ([]byte, error) {
+func CreateIndex(summaryData []byte, pageData []byte, marker string, base string, titleText string, color Colors) ([]byte, error) {
 	body := createHTMLElement("body", nil)
 
 	n, err := html.Parse(bytes.NewReader(summaryData))
@@ -191,7 +201,7 @@ func CreateIndex(summaryData []byte, pageData []byte, marker string, base string
 	})
 	body.AppendChild(docsJs)
 
-	root := createHTMLElement("html", add(id("docs-root"), "lang", "en"), CreateHead(base, fmt.Sprintf("%s - %s", s, titleText)), body)
+	root := createHTMLElement("html", add(id("docs-root"), "lang", "en"), CreateHead(base, fmt.Sprintf("%s - %s", s, titleText), color), body)
 
 	r, err := renderHTML(root)
 	if err != nil {

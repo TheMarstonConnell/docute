@@ -1,9 +1,4 @@
-:root {
-    --primary: #E9F451;
-    --text: #1B1C16;
-    --background: #DDDCCE;
-    --secondary: #C6C5AD;
-}
+
 
 @font-face {
     font-family: "teka";
@@ -22,7 +17,7 @@ html, body {
 }
 
 #header {
-    background-color: var(--text);
+    background-color: var(--title);
     color: var(--background);
 
     display: flex;
