@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"gopkg.in/yaml.v3"
 	"log"
 	"net/http"
 	"os"
+
+	"gopkg.in/yaml.v3"
 
 	"github.com/TheMarstonConnell/docute/gen"
 	"github.com/spf13/cobra"

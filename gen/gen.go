@@ -3,10 +3,11 @@ package gen
 import (
 	"embed"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
 	"path"
 	"regexp"
+
+	"gopkg.in/yaml.v3"
 )
 
 //go:embed fonts/*
