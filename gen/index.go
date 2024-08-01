@@ -87,11 +87,11 @@ func CreateHead(base string, titleText string, color Colors) *html.Node {
 	})
 
 	icons := createHTMLElement("link", map[string]string{"rel": "stylesheet", "href": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", "defer": ""})
-	highlightcss := createHTMLElement("link", map[string]string{"rel": "stylesheet", "href": "/default.min.css"})
-	highlightjs := createHTMLElement("script", map[string]string{"src": "/highlight.min.js"})
-	highlightjsGo := createHTMLElement("script", map[string]string{"src": "/go.min.js"})
+	highlightcss := createHTMLElement("link", map[string]string{"rel": "stylesheet", "href": fmt.Sprintf("%sdefault.min.css", base)})
+	highlightjs := createHTMLElement("script", map[string]string{"src": fmt.Sprintf("%shighlight.min.js", base)})
+	highlightjsGo := createHTMLElement("script", map[string]string{"src": fmt.Sprintf("%sgo.min.js", base)})
 
-	favicon := createHTMLElement("link", map[string]string{"rel": "icon", "type": "image/png", "href": "/icon.png"})
+	favicon := createHTMLElement("link", map[string]string{"rel": "icon", "type": "image/png", "href": fmt.Sprintf("%sicon.png", base)})
 
 	b := createHTMLElement("base", map[string]string{"href": base})
 
