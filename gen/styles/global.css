@@ -151,6 +151,13 @@ li.dropdown.open > ul {
     transition: background-color 0.3s ease-in-out;
 }
 
+code {
+    font-weight: bold;
+}
+
+pre > code {
+    font-weight: normal;
+}
 
 #navbar > ul > li > a,
 #navbar > ul > li > ul > li > a{
