@@ -3,6 +3,7 @@ window.addEventListener("load", start)
 
 function start () {
     console.log("hello world!")
+    hljs.highlightAll();
 
     const menuButton = document.getElementById("menu")
     const nav = document.getElementById("navbar")
