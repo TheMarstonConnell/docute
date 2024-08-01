@@ -6,6 +6,7 @@ import (
 	"os"
 	"path"
 	"regexp"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -32,7 +33,8 @@ func ReplaceMarkdownLinks(text string) string {
 	re := regexp.MustCompile(`(\[[^\]]+\]\()([^\)/][^\)]+)(\))`)
 
 	// Function to add leading slash
-	return re.ReplaceAllString(text, `$1/$2$3`)
+	t := re.ReplaceAllString(text, `$1/$2$3`)
+	return strings.ReplaceAll(t, "/http", "http")
 }
 
 func MakeAbsoluteLinks(text string) string {
