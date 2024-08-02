@@ -204,7 +204,8 @@ func Walk(dir string, out string, summary []byte, base string, titleText string,
 			return err
 		}
 
-		fileData := ReplaceMarkdownLinks(string(f))
+		//fileData := ReplaceMarkdownLinks(string(f))
+		fileData := MakeAbsoluteLinks(string(f))
 		htmlData := mdToHTML([]byte(fileData))
 
 		newData, err := CreateIndex(summary, htmlData, newPath[5:], base, titleText, color)

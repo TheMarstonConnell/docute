@@ -32,6 +32,11 @@ html, body {
     margin: 0px;
 }
 
+p > a {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 img {
     max-width: 100%;
 }
