@@ -16,6 +16,10 @@ html, body {
     font-family: teka;
 }
 
+button {
+    cursor: pointer;
+}
+
 #header {
     background-color: var(--title);
     color: var(--background);
@@ -37,8 +41,12 @@ p > a {
     text-decoration: underline;
 }
 
-img {
-    max-width: 100%;
+p > img {
+    max-width: 800px;
+    width: 100%;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 #logo {
@@ -162,6 +170,26 @@ li.dropdown.open > ul {
 
 code {
     font-weight: bold;
+    position: relative;
+}
+
+code > button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+.copy-button {
+    background-color: var(--background);
+    color: var(--text);
+    border: none;
+    padding: 4px 8px;
+}
+
+
+.copy-button::before {
+    content: 'copy'; /* Unicode character for clipboard icon */
+    font-size: 16px;
 }
 
 pre > code {
