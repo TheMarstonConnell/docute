@@ -32,6 +32,10 @@ html, body {
     margin: 0px;
 }
 
+img {
+    max-width: 100%;
+}
+
 #logo {
     height: 48px;
     padding-bottom: 6px;

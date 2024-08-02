@@ -184,6 +184,16 @@ func Walk(dir string, out string, summary []byte, base string, titleText string,
 
 		ext := path.Ext(p)
 		if ext != ".md" {
+			f, err := os.ReadFile(p)
+			if err != nil {
+				fmt.Println(err)
+				return err
+			}
+			err = os.WriteFile(o, f, os.ModePerm)
+			if err != nil {
+				fmt.Println(err)
+				return err
+			}
 			continue
 		}
 
