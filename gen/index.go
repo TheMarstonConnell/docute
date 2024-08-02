@@ -186,7 +186,9 @@ func CreateIndex(summaryData []byte, pageData []byte, marker string, base string
 
 	headerBar := createHTMLElement("div", id("header"), title, buttons, hamburgerButton)
 
-	main := createHTMLElement("div", id("main"), headerBar, nav, page)
+	snackbar := createHTMLElement("div", id("snackbar"))
+
+	main := createHTMLElement("div", id("main"), headerBar, nav, page, snackbar)
 
 	body.AppendChild(main)
 

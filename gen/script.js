@@ -1,8 +1,7 @@
 window.addEventListener("load", start)
 
 
-
-function start () {
+function start() {
     console.log("hello world!")
 
     const menuButton = document.getElementById("menu")
@@ -54,7 +53,17 @@ function start () {
             console.log("yo!")
 
             navigator.clipboard.writeText(code).then(() => {
-                alert("Copied code to clipboard.")
+                let x = document.getElementById("snackbar");
+
+                // Add the "show" class to DIV
+                x.innerText = "Code copied to clipboard."
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () {
+                    x.className = x.className.replace("show", "");
+                }, 3000);
+
             })
 
         }, false)
