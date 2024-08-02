@@ -22,29 +22,8 @@ function start() {
     for (const allPre of allPres) {
         const innerCodeBlocks = allPre.getElementsByTagName("code")
 
-        for (const innerCodeBlock of innerCodeBlocks) {
-            codeBlocks.push(innerCodeBlock)
-        }
+        const code = innerCodeBlocks[0].innerText
 
-    }
-
-    const codes = []
-
-    for (const codeBlock of codeBlocks) {
-        console.log(codeBlock)
-        const code = codeBlock.innerText
-        console.log(code)
-        codes.push(code)
-    }
-
-    console.log(codes)
-
-    console.log("highlighting...")
-    hljs.highlightAll();
-
-    for (let i = 0; i < codeBlocks.length; i++) {
-        const codeBlock = codeBlocks[i]
-        const code = codes[i]
 
         const button = document.createElement("button")
         button.classList.add("copy-button")
@@ -68,8 +47,14 @@ function start() {
 
         }, false)
 
-        codeBlock.appendChild(button)
+        allPre.appendChild(button)
+
     }
+
+    console.log("highlighting...")
+    hljs.highlightAll();
+
+
 
 
 }

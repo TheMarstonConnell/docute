@@ -167,10 +167,13 @@ li.dropdown.open > ul {
 
 code {
     font-weight: bold;
+}
+
+pre {
     position: relative;
 }
 
-code > button {
+pre > button {
     position: absolute;
     top: 12px;
     right: 12px;
