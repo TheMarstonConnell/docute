@@ -71,6 +71,7 @@ p > img {
     line-height: 1.25rem;
 
     background-color: var(--secondary);
+    z-index: 5;
 }
 
 #navbar > h1:first-child {
