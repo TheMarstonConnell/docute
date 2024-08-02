@@ -208,7 +208,7 @@ func Walk(dir string, out string, summary []byte, base string, titleText string,
 		fileData := MakeAbsoluteLinks(string(f))
 		htmlData := mdToHTML([]byte(fileData))
 
-		newData, err := CreateIndex(summary, htmlData, newPath[5:], base, titleText, color)
+		newData, err := CreateIndex(summary, htmlData, fileData, newPath[5:], base, titleText, color)
 		if err != nil {
 			fmt.Println(err)
 			return err
