@@ -27,6 +27,7 @@ function start() {
 
         const button = document.createElement("button")
         button.classList.add("copy-button")
+        button.ariaLabel = "Copy Code Button"
 
         button.addEventListener("click", () => {
             console.log("yo!")
