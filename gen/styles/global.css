@@ -78,6 +78,19 @@ p > img {
     display: none;
 }
 
+table {
+    background-color: var(--secondary);
+}
+
+td, th {
+    padding: 3px 2px;
+    border: 1px solid var(--text);
+    min-width: 100px;
+}
+
+thead {
+    font-size: 1rem;
+}
 
 #navbar > * {
     margin: 0px;
@@ -170,6 +183,7 @@ li.dropdown.open > ul {
 
 code {
     font-weight: bold;
+    background-color: var(--secondary);
 }
 
 pre {
