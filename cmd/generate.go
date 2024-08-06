@@ -127,19 +127,16 @@ func WatchCMD() *cobra.Command {
 			websocketHandler := func(w http.ResponseWriter, r *http.Request) {
 				conn, err := upgrader.Upgrade(w, r, nil)
 				if err != nil {
-					log.Println("Failed to upgrade to WebSocket:", err)
 					return
 				}
 				defer conn.Close()
 				ws = conn
 
 				for {
-					_, message, err := conn.ReadMessage()
+					_, _, err := conn.ReadMessage()
 					if err != nil {
-						log.Println("Error reading message:", err)
 						break
 					}
-					log.Printf("Received message: %s", message)
 				}
 			}
 
@@ -155,7 +152,6 @@ func WatchCMD() *cobra.Command {
 					select {
 					case event := <-w.Event:
 						fmt.Println(event)
-
 						err := regen(cmd, ws)
 						if err != nil {
 							log.Fatalln(err)

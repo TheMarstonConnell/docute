@@ -1,5 +1,6 @@
 # Docute
 
+## Getting Started
 * [Introduction](README.md)
 
 ## Syntax
