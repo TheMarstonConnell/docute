@@ -43,7 +43,7 @@ func MakeAbsoluteLinks(text string) string {
 	return re.ReplaceAllString(text, "($1.html)")
 }
 
-func Gen(out string, base string, titleText string) error {
+func Gen(out string, base string, titleText string, inDev bool) error {
 	_ = os.RemoveAll(out)
 
 	dir, err := os.Getwd()
@@ -73,7 +73,7 @@ func Gen(out string, base string, titleText string) error {
 
 	// fileData := ReplaceMarkdownLinks(string(d))
 	htmlData := mdToHTML([]byte(dd))
-	err = Walk(dir, out, htmlData, base, titleText, color)
+	err = Walk(dir, out, htmlData, base, titleText, color, inDev)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -154,7 +154,7 @@ func Gen(out string, base string, titleText string) error {
 	return nil
 }
 
-func Walk(dir string, out string, summary []byte, base string, titleText string, color Colors) error {
+func Walk(dir string, out string, summary []byte, base string, titleText string, color Colors, inDev bool) error {
 	_ = os.MkdirAll(out, os.ModePerm)
 
 	contents, err := os.ReadDir(dir)
@@ -174,7 +174,7 @@ func Walk(dir string, out string, summary []byte, base string, titleText string,
 				fmt.Println(err)
 				return err
 			}
-			err := Walk(p, o, summary, base, titleText, color)
+			err := Walk(p, o, summary, base, titleText, color, inDev)
 			if err != nil {
 				fmt.Println(err)
 				return err
@@ -208,7 +208,7 @@ func Walk(dir string, out string, summary []byte, base string, titleText string,
 		fileData := MakeAbsoluteLinks(string(f))
 		htmlData := mdToHTML([]byte(fileData))
 
-		newData, err := CreateIndex(summary, htmlData, fileData, newPath[5:], base, titleText, color)
+		newData, err := CreateIndex(summary, htmlData, fileData, newPath[5:], base, titleText, color, inDev)
 		if err != nil {
 			fmt.Println(err)
 			return err

@@ -15,6 +15,9 @@ import _ "embed"
 //go:embed script.js
 var docScript string
 
+//go:embed devsocket.js
+var devSocket string
+
 //go:embed normalize.css
 var normalize string
 
@@ -156,7 +159,7 @@ func CreateNav(summary *html.Node) *html.Node {
 	return nav
 }
 
-func CreateIndex(summaryData []byte, pageData []byte, bodyText string, marker string, base string, titleText string, color Colors) ([]byte, error) {
+func CreateIndex(summaryData []byte, pageData []byte, bodyText string, marker string, base string, titleText string, color Colors, inDev bool) ([]byte, error) {
 	body := createHTMLElement("body", nil)
 
 	n, err := html.Parse(bytes.NewReader(summaryData))
@@ -198,6 +201,14 @@ func CreateIndex(summaryData []byte, pageData []byte, bodyText string, marker st
 		Data: docScript,
 	})
 	body.AppendChild(docsJs)
+
+	if inDev {
+		webSocket := createHTMLElement("script", nil, &html.Node{
+			Type: html.TextNode,
+			Data: devSocket,
+		})
+		body.AppendChild(webSocket)
+	}
 
 	root := createHTMLElement("html", add(id("docs-root"), "lang", "en"), CreateHead(base, fmt.Sprintf("%s - %s", s, titleText), color, getDesc(bodyText)), body)
 
