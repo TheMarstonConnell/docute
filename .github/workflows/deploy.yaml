@@ -1,0 +1,53 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch if it's not 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'  # Use the appropriate version of Go
+
+      - name: Build Go project
+        run: |
+            go build -o docute .
+
+      - name: Run Go executable
+        run: |
+            cd docs
+            ../docute generate --base="/docute/"
+
+      - name: Setup Node.js (for Git commands)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Deploy to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Configure git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if git show-ref --quiet refs/heads/gh-pages; then
+            git checkout gh-pages
+          else
+            git checkout --orphan gh-pages
+          fi
+          
+          # Copy new content to the gh-pages branch
+          cp -r docs/.out/* .
+          git add .
+          git commit -m "Deploy to gh-pages"
+          git push origin gh-pages --force

@@ -1,0 +1,129 @@
+
+#menu {
+    display: none;
+    position: absolute;
+    right: 16px;
+    top: 1rem;
+
+    background-color: #00000000;
+    border: none;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 24px;
+    color: var(--background);
+    width: min-content;
+}
+
+
+@media only screen and (max-width: 600px) {
+
+
+    #menu {
+        display: block;
+
+
+    }
+
+    #main {
+        display: block;
+        /*grid-template-columns: 1fr 3fr;*/
+        /*grid-template-rows: 80px 1fr ;*/
+        /*grid-template-areas:*/
+        /*    "header header"*/
+        /*    "page page ";*/
+
+        overflow-y: scroll;
+        max-height: 100dvh;
+    }
+
+    #navbar {
+        box-sizing: border-box;
+        position: absolute;
+        top: 3.95rem;
+        left: 0;
+        width: 100vw;
+        height: 0vh;
+        grid-area: nav;
+        transition: height 0.4s;
+        padding-top: 0px;
+        padding-bottom: 0px;
+
+        overflow-y: hidden;
+
+        background-color: var(--text);
+        color: var(--background);
+    }
+
+    #navbar > ul > li > a {
+        color: var(--background);
+    }
+
+    #navbar > ul > li > a.active {
+        color: var(--text);
+    }
+
+    #navbar.open {
+        height: calc(100vh - 3.95rem);
+        overflow-y: scroll;
+    }
+
+    #navbar.open > *:last-child {
+        margin-bottom: 160px;
+    }
+
+    #navbar.open > ul:nth-child(2) {
+        margin-top: 40px;
+    }
+
+    #page {
+
+        padding-left: 0px;
+        padding-right: 0px;
+
+        padding-top: 68px;
+
+        margin-left: auto;
+        margin-right: auto;
+
+        width: calc(100% - (24px + 1rem) * 2);
+
+    }
+
+    #header {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 4rem;
+        padding-left: 16px;
+    }
+
+}
+
+@media only screen and (min-width: 600px) {
+
+    #main {
+        display: grid;
+        grid-template-columns: fit-content(33%) 3fr;
+        grid-template-rows: 80px 1fr;
+        grid-template-areas:
+            "header header"
+            "nav page ";
+    }
+
+    #navbar {
+        display: block;
+        grid-area: nav;
+    }
+
+    #page {
+        grid-area: page;
+    }
+
+    #header {
+        grid-area: header;
+    }
+
+}
+
+
