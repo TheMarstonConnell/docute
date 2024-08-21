@@ -1,4 +1,4 @@
-module github.com/TheMarstonConnell/docute
+module github.com/JackalLabs/docute
 
 go 1.22.1
 
