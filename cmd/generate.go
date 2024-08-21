@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/TheMarstonConnell/docute/gen"
+	"github.com/JackalLabs/docute/gen"
 	"github.com/gorilla/websocket"
 	"github.com/radovskyb/watcher"
 	"github.com/spf13/cobra"

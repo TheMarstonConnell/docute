@@ -7,7 +7,7 @@ Before installing, please make sure Go is installed. [Install Go here](https://g
 
 To install Docute, we can use Go's install command:
 ```shell
-go install github.com/TheMarstonConnell/docute@latest
+go install github.com/JackalLabs/docute@latest
 ```
 
 After Docute is installed, you can run the following commands to generate your documentation. Make sure you're in the root folder of your docs before running Docute.
