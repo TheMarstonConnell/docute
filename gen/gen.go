@@ -38,9 +38,22 @@ func ReplaceMarkdownLinks(text string) string {
 }
 
 func MakeAbsoluteLinks(text string) string {
+	// First, find all markdown links
 	re := regexp.MustCompile(`\(([^()]+)\.md\)`)
 
-	return re.ReplaceAllString(text, "($1.html)")
+	// Use a replacement function through a callback approach
+	return re.ReplaceAllStringFunc(text, func(match string) string {
+		// Extract the link content (without parentheses)
+		innerContent := match[1 : len(match)-1]
+
+		// If it starts with http:// or https://, return it unchanged
+		if strings.HasPrefix(innerContent, "http://") || strings.HasPrefix(innerContent, "https://") {
+			return match
+		}
+
+		// Otherwise, replace .md with .html
+		return "(" + strings.TrimSuffix(innerContent, ".md") + ".html)"
+	})
 }
 
 func Gen(out string, base string, titleText string, inDev bool) error {
